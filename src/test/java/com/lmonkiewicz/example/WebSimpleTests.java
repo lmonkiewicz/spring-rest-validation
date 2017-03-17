@@ -2,18 +2,16 @@ package com.lmonkiewicz.example;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.lmonkiewicz.example.model.Person;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
  * Created by lmonkiewicz on 17.03.2017.
@@ -65,40 +63,6 @@ public class WebSimpleTests {
                 get("/simple/name"))
                 .andExpect(status().isBadRequest())
                 .andExpect(status().reason("Required String parameter 'query' is not present"));
-
-    }
-
-    @Test
-    public void POST_OnUsersWithNoBodyShouldReturnBadRequest400() throws Exception {
-        mockMvc.perform(
-                post("/simple/users"))
-                .andExpect(status().isBadRequest());
-    }
-
-    @Test
-    public void POST_OnUsersWithFullDataShouldReturnIdAndCreatedStatus() throws Exception {
-        mockMvc.perform(
-                post("/simple/users")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(toJson(
-                        Person.builder().firstName("Stefan").lastName("Stefanowsky").age(35).build()
-                    ))
-                )
-                .andExpect(status().isCreated())
-                .andExpect(header().string("Location", "/simple/users/1"))
-                .andExpect(content().string("1"));
-    }
-
-    @Test
-    public void POST_OnUsersWithNoFirstNameShouldReturnBadRequest400() throws Exception {
-        mockMvc.perform(
-                post("/simple/users")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(toJson(
-                                Person.builder().lastName("Stefanowsky").age(22).build()
-                        ))
-                )
-                .andExpect(status().isBadRequest());
 
     }
 
