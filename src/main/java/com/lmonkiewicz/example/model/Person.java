@@ -16,7 +16,7 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 public class Person {
 
-    @NotNull
+    @NotNull(message = "First name is required")
     private String firstName;
 
     @NotNull

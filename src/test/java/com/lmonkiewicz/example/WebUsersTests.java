@@ -54,8 +54,9 @@ public class WebUsersTests {
                         .content(toJson(
                                 Person.builder().lastName("Stefanowsky").age(22).build()
                         ))
-                )
-                .andExpect(status().isBadRequest());
+        )
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value("First name is required"));
 
     }
 
