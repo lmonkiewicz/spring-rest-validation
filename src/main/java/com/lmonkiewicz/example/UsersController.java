@@ -1,14 +1,14 @@
 package com.lmonkiewicz.example;
 
 import com.lmonkiewicz.example.model.ErrorResponse;
-import com.lmonkiewicz.example.model.Person;
+import com.lmonkiewicz.example.model.User;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.net.URI;
 
 /**
@@ -19,10 +19,20 @@ import java.net.URI;
 public class UsersController {
 
     @PostMapping
-    private ResponseEntity<?> createPerson(@Valid @RequestBody Person person) {
+    public ResponseEntity<?> createUser(@Validated(User.New.class) @RequestBody User user) {
         return ResponseEntity.created(URI.create("/users/1")).body("1");
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getUser(@PathVariable Long id) {
+        if (id == 1L) {
+            final User user = User.builder().id(1L).firstName("Stefan").lastName("Stefanowsky").age(32).build();
+            return ResponseEntity.ok(user);
+        }
+        else {
+            return ResponseEntity.notFound().build();
+        }
+    }
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
