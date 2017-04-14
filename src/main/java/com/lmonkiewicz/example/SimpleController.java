@@ -16,12 +16,12 @@ public class SimpleController {
     }
 
     @GetMapping("/hello/{name}")
-    private String hello(@PathVariable("name") String name){
+    private String hello(@PathVariable(value = "name", required = true) String name){
         return String.format("Hello %s!", name);
     }
 
     @GetMapping("/name")
-    private ResponseEntity<?> queryPerson(@RequestParam("query") String query) {
+    private ResponseEntity<?> queryPerson(@RequestParam(value = "query", required = false) String query) {
         if ("Stefan".equals(query)) {
             return ResponseEntity.ok("Stefan Stefanowsky");
         }
